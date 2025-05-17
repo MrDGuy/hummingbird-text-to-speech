@@ -21,7 +21,7 @@ public class OpenAiAudio {
 
     public byte[] createAudio()
     {
-        OpenAiAudioApi openAiAudioApi = new OpenAiAudioApi("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");
+        OpenAiAudioApi openAiAudioApi = new OpenAiAudioApi("key");
 
         OpenAiAudioSpeechModel openAiAudioSpeechModel = new OpenAiAudioSpeechModel(openAiAudioApi);
 
