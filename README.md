@@ -37,15 +37,15 @@ javac *.java
 Create a file named `application.properties` in your working directory:
 
 ```properties
-openai.api.key=your-openai-key-here
+spring.application.name=texttospeech
+ai.provider=openai
+ai.openai.api-key=your_key_here
 ```
 
 This file is used by `OpenAiAudio.java` to load your API key.
 
-Alternatively, you can set the key as an environment variable:
-
 ```bash
-export SPRING_API_KEY=your-openai-key-here
+  OpenAiAudioApi openAiAudioApi = new OpenAiAudioApi("key");
 ```
 
 ---
@@ -65,9 +65,6 @@ robot.setServoPosition(1, 90);
 // Turn LED 1 to full brightness
 robot.setLED(1, 255);
 
-// Spin motor 1 at full speed
-robot.setMotorVelocity(1, 255);
-
 // Read sensor value on port 1
 int sensorVal = robot.getSensorValue(1);
 
@@ -85,8 +82,21 @@ robot.disconnect();
 Combines TTS and audio playback:
 
 ```java
-HummingbirdAudio ttsRobot = new HummingbirdAudio();
-ttsRobot.speakFromApi("Hello world. I am a robot powered by OpenAI.");
+      // Instantiate the Hummingbird object (establishes a connection to the Hummingbird)
+      HummingbirdRobot hummingbird = new HummingbirdRobot();
+      String[] aiVoices = {"ALLOY","ASH","CORAL","ECHO","FABLE","NOVA","ONYX","SAGE","SHIMMER"};
+
+      //This String is what the AI Voice will say
+      String aiVoiceText = "Testing";
+
+      //Hummingbird Audio Arguments: Text to say, Voice and Speed (float).
+      //Select a voice from the aiVoices String array
+      HummingbirdAudio sound = new HummingbirdAudio(aiVoiceText,aiVoices[0],1.0f);
+
+      //This code will play the voices in a thread at the same time the hummingbird is running
+      byte[] soundFile = sound.getAudioFile();
+      Thread audioThread = new Thread(() -> HummingbirdAudio.playAudio(soundFile));
+      audioThread.start();
 ```
 
 This uses:
@@ -118,10 +128,6 @@ String apiKey = props.getProperty("openai.api.key");
 ## Demo Program
 
 Run `MyProject.java` for a full demonstration:
-
-```bash
-java MyProject
-```
 
 This will:
 1. Connect to the Hummingbird Duo
